@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { ArchitectMode } from '../types';
 import { generateBlueprint } from '../services/geminiService';
 import { GlassCard } from './GlassCard';
+import { marked } from 'marked';
 
 interface GenerationConsoleProps {
   mode: ArchitectMode;
@@ -34,8 +34,8 @@ export const GenerationConsole: React.FC<GenerationConsoleProps> = ({ mode }) =>
       const output = await generateBlueprint(mode, prompt);
       setResult(output);
       setLogs(prev => [...prev, "Synthesis Complete.", "Ready for Deployment."]);
-    } catch (error) {
-      setLogs(prev => [...prev, "ERROR: Synthesis Interrupted.", String(error)]);
+    } catch (error: any) {
+      setLogs(prev => [...prev, "ERROR: Synthesis Interrupted.", String(error.message || error)]);
     } finally {
       setIsGenerating(false);
     }
@@ -46,6 +46,14 @@ export const GenerationConsole: React.FC<GenerationConsoleProps> = ({ mode }) =>
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [logs]);
+
+  // Configure marked options
+  useEffect(() => {
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+    });
+  }, []);
 
   return (
     <div className="max-w-7xl mx-auto px-4 pb-40">
@@ -80,7 +88,7 @@ export const GenerationConsole: React.FC<GenerationConsoleProps> = ({ mode }) =>
       {/* Output Console */}
       {(logs.length > 0 || result) && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <GlassCard hoverable={false} className="lg:col-span-1 h-[500px] flex flex-col">
+          <GlassCard hoverable={false} className="lg:col-span-1 h-[600px] flex flex-col">
             <h4 className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-4">Neural Logs</h4>
             <div ref={scrollRef} className="flex-1 overflow-y-auto font-mono text-[11px] space-y-2 text-zinc-400">
               {logs.map((log, i) => (
@@ -93,7 +101,7 @@ export const GenerationConsole: React.FC<GenerationConsoleProps> = ({ mode }) =>
             </div>
           </GlassCard>
 
-          <GlassCard hoverable={false} className="lg:col-span-2 h-[500px] flex flex-col p-0 overflow-hidden">
+          <GlassCard hoverable={false} className="lg:col-span-2 h-[600px] flex flex-col p-0 overflow-hidden">
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/5">
               <h4 className="text-xs font-mono uppercase tracking-widest text-zinc-500">Architectural Output</h4>
               {result && (
@@ -105,14 +113,19 @@ export const GenerationConsole: React.FC<GenerationConsoleProps> = ({ mode }) =>
                 </button>
               )}
             </div>
-            <div className="flex-1 overflow-y-auto p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap text-zinc-300">
-              {result || (isGenerating ? (
+            <div className="flex-1 overflow-y-auto p-8 text-sm leading-relaxed text-zinc-300 scroll-smooth">
+              {result ? (
+                <div 
+                  className="markdown-content"
+                  dangerouslySetInnerHTML={{ __html: marked.parse(result) }}
+                />
+              ) : (isGenerating ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4 text-zinc-600">
                   <div className="w-12 h-12 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                  <p className="animate-pulse">Decoding Future Blueprint...</p>
+                  <p className="animate-pulse font-mono uppercase tracking-tighter">Decoding Future Blueprint...</p>
                 </div>
               ) : (
-                <div className="flex items-center justify-center h-full text-zinc-600">
+                <div className="flex items-center justify-center h-full text-zinc-600 font-mono">
                   Awaiting Synthesis Command...
                 </div>
               ))}

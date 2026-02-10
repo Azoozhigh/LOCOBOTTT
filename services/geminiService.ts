@@ -5,12 +5,14 @@ const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
 const MARKDOWN_RULES = `
 OUTPUT RULES:
-- Always use high-quality Markdown.
-- Use '##' for main sections and '###' for sub-sections.
+- Always use high-quality, valid Markdown.
+- Use '##' for main sections (e.g., ## Architectural Overview).
+- Use '###' for subsections.
 - Wrap all code in triple backticks with language identifiers (e.g., \`\`\`typescript).
-- Include an "Architectural Overview" section first.
-- Include a "File Structure" section with a tree-view.
-- Provide detailed, production-ready code for the most important components.
+- For file structures, use a code block with 'text' language.
+- Ensure clear spacing between paragraphs and sections.
+- Use bullet points for features and technical requirements.
+- DO NOT use bold text for every single sentence; use it for emphasis only.
 `;
 
 export const generateBlueprint = async (mode: ArchitectMode, prompt: string) => {
