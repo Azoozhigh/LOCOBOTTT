@@ -52,7 +52,6 @@
         animation: float 6s ease-in-out infinite;
       }
       
-      /* Initial loader styles to prevent "white flash" and show activity */
       #initial-loader {
         position: fixed;
         inset: 0;
@@ -62,49 +61,37 @@
         justify-content: center;
         background: #000;
         z-index: 9999;
-        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .loader-content {
-        text-align: center;
-        animation: pulse-slow 3s infinite ease-in-out;
+        transition: opacity 0.5s ease-out;
       }
       .loader-logo {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
         border: 2px solid rgba(255,255,255,0.1);
         border-top-color: #fff;
         border-radius: 50%;
-        margin: 0 auto 20px;
-        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+        animation: spin 0.8s linear infinite;
       }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-      @keyframes pulse-slow {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
-      }
+      @keyframes spin { to { transform: rotate(360deg); } }
     </style>
     <script type="importmap">
-    {
-      "imports": {
-        "@google/genai": "https://esm.sh/@google/genai@^1.40.0",
-        "react": "https://esm.sh/react@^19.2.4",
-        "react/": "https://esm.sh/react@^19.2.4/",
-        "react-dom": "https://esm.sh/react-dom@^19.2.4",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-        "react-dom/client": "https://esm.sh/react-dom@^19.2.4/client"
-      }
-    }
-    </script>
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@1.40.0",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/"
+  }
+}
+</script>
     <script type="module" src="./index.tsx"></script>
   </head>
   <body>
     <div id="initial-loader">
-      <div class="loader-content">
-        <div class="loader-logo"></div>
-        <div class="text-[10px] font-mono tracking-[0.4em] uppercase text-white/50">Initializing Neural Link</div>
-      </div>
+      <div class="loader-logo"></div>
+      <div class="text-[10px] font-mono tracking-[0.5em] uppercase text-white/40">Initializing Neural Link...</div>
     </div>
     <div id="root"></div>
   </body>

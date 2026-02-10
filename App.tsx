@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Hero } from './components/Hero';
 import { CommandCenter } from './components/CommandCenter';
 import { GenerationConsole } from './components/GenerationConsole';
@@ -8,9 +7,17 @@ import { ArchitectMode } from './types';
 const App: React.FC = () => {
   const [activeMode, setActiveMode] = useState<ArchitectMode | null>(null);
 
+  useEffect(() => {
+    // Once App mounts, remove the initial loader
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      loader.style.opacity = '0';
+      setTimeout(() => loader.remove(), 600);
+    }
+  }, []);
+
   const handleSelectMode = (mode: ArchitectMode) => {
     setActiveMode(mode);
-    // Smooth scroll to the console
     setTimeout(() => {
       const consoleEl = document.getElementById('generation-console');
       if (consoleEl) {
@@ -20,7 +27,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-black text-white">
       <Hero />
       
       <CommandCenter 
@@ -44,7 +51,7 @@ const App: React.FC = () => {
         <div className="flex gap-4">
           <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Origins</button>
           <button onClick={() => {
-            const cmd = document.querySelector('.max-w-7xl');
+            const cmd = document.querySelector('#command-center-header');
             if (cmd) cmd.scrollIntoView({ behavior: 'smooth' });
           }} className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Modules</button>
           <button className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Settings</button>

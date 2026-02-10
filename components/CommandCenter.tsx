@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { GlassCard } from './GlassCard';
 import { ArchitectMode } from '../types';
@@ -58,7 +57,7 @@ export const CommandCenter: React.FC<CommandCenterProps> = ({ onSelectMode, acti
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-20">
+    <div className="max-w-7xl mx-auto px-4 py-20" id="command-center-header">
       <div className="flex items-center justify-between mb-12">
         <div>
           <h2 className="text-4xl font-bold tracking-tight mb-2">Command Center</h2>
