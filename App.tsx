@@ -8,11 +8,11 @@ const App: React.FC = () => {
   const [activeMode, setActiveMode] = useState<ArchitectMode | null>(null);
 
   useEffect(() => {
-    // Once App mounts, remove the initial loader
+    // Reveal app once mounted
     const loader = document.getElementById('initial-loader');
     if (loader) {
       loader.style.opacity = '0';
-      setTimeout(() => loader.remove(), 600);
+      setTimeout(() => loader.remove(), 800);
     }
   }, []);
 
@@ -21,13 +21,13 @@ const App: React.FC = () => {
     setTimeout(() => {
       const consoleEl = document.getElementById('generation-console');
       if (consoleEl) {
-        consoleEl.scrollIntoView({ behavior: 'smooth' });
+        consoleEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    }, 100);
+    }, 50);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
       <Hero />
       
       <CommandCenter 
@@ -36,31 +36,33 @@ const App: React.FC = () => {
       />
 
       {activeMode && (
-        <div id="generation-console" className="scroll-mt-20">
+        <div id="generation-console" className="scroll-mt-12 transition-all duration-1000">
           <GenerationConsole mode={activeMode} />
         </div>
       )}
 
-      {/* Global Navigation - Persistent CTA */}
-      <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 glass border border-white/10 px-6 py-4 rounded-full flex items-center gap-8 z-50 shadow-2xl">
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-white rounded-full"></div>
-          <span className="text-[10px] font-black tracking-widest uppercase">LOCOBOT 2045</span>
+      {/* Global Persistence Nav */}
+      <nav className="fixed bottom-10 left-1/2 -translate-x-1/2 glass px-10 py-5 rounded-full flex items-center gap-12 z-50 shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10">
+        <div className="flex items-center gap-3">
+          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+          <span className="text-[10px] font-black tracking-[0.4em] uppercase">LOCOBOT_45</span>
         </div>
         <div className="h-4 w-[1px] bg-white/10"></div>
-        <div className="flex gap-4">
-          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Origins</button>
-          <button onClick={() => {
-            const cmd = document.querySelector('#command-center-header');
-            if (cmd) cmd.scrollIntoView({ behavior: 'smooth' });
-          }} className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Modules</button>
-          <button className="text-[10px] uppercase font-bold text-zinc-400 hover:text-white transition-colors">Settings</button>
+        <div className="flex gap-8">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="text-[10px] uppercase font-black text-zinc-500 hover:text-white transition-all hover:tracking-widest">Home</button>
+          <button onClick={() => document.getElementById('command-center-header')?.scrollIntoView({ behavior: 'smooth' })} className="text-[10px] uppercase font-black text-zinc-500 hover:text-white transition-all hover:tracking-widest">Modules</button>
+          <button className="text-[10px] uppercase font-black text-zinc-800 cursor-not-allowed">v4.0.9</button>
         </div>
       </nav>
 
-      <footer className="py-20 text-center border-t border-white/5 mt-20">
-        <p className="text-zinc-600 text-xs font-mono tracking-widest uppercase">
-          LOCOBOT ARCHITECT v4.0.5 &bull; Built for the Future &bull; &copy; 2045 Neosynthetic Corp
+      <footer className="py-32 text-center border-t border-white/5 mt-20">
+        <div className="mb-8 flex justify-center gap-10 opacity-20">
+          <span className="text-[9px] font-mono uppercase tracking-widest">Quantum Encryption</span>
+          <span className="text-[9px] font-mono uppercase tracking-widest">Neural Link v2</span>
+          <span className="text-[9px] font-mono uppercase tracking-widest">2045 Protocol</span>
+        </div>
+        <p className="text-zinc-700 text-[10px] font-mono tracking-[0.5em] uppercase">
+          LOCOBOT ARCHITECT &bull; THE FUTURE IS SYNTHETIC &bull; &copy; 2045
         </p>
       </footer>
     </div>
